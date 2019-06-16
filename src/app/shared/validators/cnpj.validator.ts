@@ -2,12 +2,13 @@ import { SomenteNumeros } from './../utils/somente.numeros';
 import { AbstractControl } from '@angular/forms';
 
 export class CnpjValidator {
+    static CNPJ = 'cnpj';
 
     static validate(control: AbstractControl): { [key: string]: boolean } {
         if (this.cnpjValido(control.value)) {
             return null;
         }
-        return { 'cnpj': true };
+        return { CNPJ: true };
     }
 
     static cnpjValido(cnpj: any): boolean {
@@ -57,5 +58,4 @@ export class CnpjValidator {
 
         return true;
     }
-
 }

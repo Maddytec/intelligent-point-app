@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { CadastrarPjComponent, CadastroPjComponent } from './components';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../../shared';
+import { CadastrarPjService } from './services';
 
 import {
   MatInputModule,
@@ -34,6 +35,9 @@ import {
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule
+  ],
+  providers: [
+    CadastrarPjService
   ]
 })
 export class CadastroPjModule { }

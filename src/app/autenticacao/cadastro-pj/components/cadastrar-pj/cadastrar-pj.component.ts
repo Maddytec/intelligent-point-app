@@ -1,5 +1,6 @@
+import { CadastrarPjService } from './../../services/cadastrar-pj.service';
 import { CpfValidator, CnpjValidator } from '../../../../shared/validators';
-import { CadastroPj } from '../../models';
+import { CadastroPj } from '../../';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -17,7 +18,8 @@ export class CadastrarPjComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private matSnackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private cadastrarPjService: CadastrarPjService
   ) { }
 
   ngOnInit() {
@@ -39,11 +41,27 @@ export class CadastrarPjComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
     const cadastroPj: CadastroPj = this.form.value;
     cadastroPj.cnpj = new SomenteNumeros(cadastroPj.cnpj).formato();
     cadastroPj.cpf = new SomenteNumeros(cadastroPj.cpf).formato();
-    alert(JSON.stringify(cadastroPj));
-  }
 
+    this.cadastrarPjService.cadastrar(cadastroPj)
+      .subscribe(
+        data => {
+          console.log(JSON.stringify(data));
+          const msg = 'Realize a autenticação para acessar o sistema.';
+          this.matSnackBar.open(msg, 'Sucesso', { duration: 6000 });
+          this.router.navigate(['/login']);
+        },
+        err => {
+          console.log(JSON.stringify(err));
+          let msg = 'Tente novamente em alguns instantes.';
+          if (err.status === 400) {
+            msg = err.error.errors.join(' ');
+          }
+          this.matSnackBar.open(msg, 'Erro', { duration: 5000 });
+        }
+      );
+    return false;
+  }
 }

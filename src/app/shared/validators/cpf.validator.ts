@@ -2,12 +2,13 @@ import { AbstractControl } from '@angular/forms';
 import { SomenteNumeros } from '../utils';
 
 export class CpfValidator {
+    static CPF = 'cpf';
 
     static validate(control: AbstractControl): { [key: string]: boolean } {
         if (this.cpfValido(control.value)) {
             return null;
         }
-        return { 'cpf': true };
+        return { CPF: true };
     }
 
     static cpfValido(cpf: any): boolean {
