@@ -1,1 +1,5 @@
 export * from './shared.module';
+export * from './validators';
+export * from './models';
+export * from './utils';
+

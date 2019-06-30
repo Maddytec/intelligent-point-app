@@ -1,25 +1,26 @@
-import { CadastrarPjService } from './../../services/cadastrar-pj.service';
-import { CpfValidator, CnpjValidator } from '../../../../shared/validators';
-import { CadastroPj } from '../../';
+import { CnpjValidator, CpfValidator } from './../../../../shared';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { CadastroPf } from '../../models';
 import { SomenteNumeros } from 'src/app/shared/utils';
+import { CadastrarPfService } from '../../services';
 
 @Component({
-  selector: 'app-cadastrar-pj',
-  templateUrl: './cadastrar-pj.component.html',
-  styleUrls: ['./cadastrar-pj.component.css']
+  selector: 'app-cadastrar-pf',
+  templateUrl: './cadastrar-pf.component.html',
+  styleUrls: ['./cadastrar-pf.component.css']
 })
-export class CadastrarPjComponent implements OnInit {
+export class CadastrarPfComponent implements OnInit {
 
   form: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private matSnackBar: MatSnackBar,
     private router: Router,
-    private cadastrarPjService: CadastrarPjService
+    private cadastrarPfService: CadastrarPfService
   ) { }
 
   ngOnInit() {
@@ -32,37 +33,35 @@ export class CadastrarPjComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       cpf: ['', [Validators.required, CpfValidator]],
-      razaoSocial: ['', [Validators.required, Validators.minLength(5)]],
       cnpj: ['', [Validators.required, CnpjValidator]]
     });
   }
 
-  cadastrarPj() {
+  cadastrarPf() {
     if (this.form.invalid) {
       return;
     }
 
-    const cadastroPj: CadastroPj = this.form.value;
-    cadastroPj.cnpj = new SomenteNumeros(cadastroPj.cnpj).formato();
-    cadastroPj.cpf = new SomenteNumeros(cadastroPj.cpf).formato();
+    const cadastroPf: CadastroPf = this.form.value;
+    cadastroPf.cnpj = new SomenteNumeros(cadastroPf.cnpj).formato();
+    cadastroPf.cpf = new SomenteNumeros(cadastroPf.cpf).formato();
 
-    this.cadastrarPjService.cadastrar(cadastroPj)
+    this.cadastrarPfService.cadastrar(cadastroPf)
       .subscribe(
         data => {
-          console.log(JSON.stringify(data));
-          const msg = 'Realize a autenticação para acessar o sistema.';
+          const msg = 'Autenticação obrigatória.';
           this.matSnackBar.open(msg, 'Sucesso', { duration: 6000 });
           this.router.navigate(['/login']);
         },
         err => {
-          console.log(JSON.stringify(err));
-          let msg = 'Tente novamente em alguns instantes.';
+          let msg = 'Tente novamente.';
           if (err.status === 400) {
             msg = err.error.errors.join(' ');
           }
-          this.matSnackBar.open(msg, 'Erro', { duration: 5000 });
+          this.matSnackBar.open(msg, 'Erro', { duration: 6000 });
         }
       );
     return false;
   }
+
 }
