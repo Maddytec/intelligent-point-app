@@ -1,4 +1,4 @@
-import { Tipo } from './../../../shared';
+import { Tipo, HttpUtilService, LancamentoService, Lancamento } from './../../../shared';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
@@ -20,7 +20,9 @@ export class LancamentoComponent implements OnInit {
 
   constructor(
     private matSnackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private httUtil: HttpUtilService,
+    private lancamentoService: LancamentoService
   ) { }
 
   ngOnInit() {
@@ -56,12 +58,41 @@ export class LancamentoComponent implements OnInit {
   }
 
   obterUltimoLancamento() {
-    this.ultimoTipoLancado = Tipo.INICIO_TRABALHO;
+    this.lancamentoService.buscarUltimoTipoLancado()
+    .subscribe(
+      data => {
+        this.ultimoTipoLancado = data.data ? data.data.tipo : '';
+      },
+      err => {
+        const msg = 'Erro obtendo último lançamento.';
+        this.matSnackBar.open(msg, 'Erro', { duration: 6000 });
+      }
+    );
   }
 
   cadastrar(tipo: Tipo) {
-    alert(`Tipo: ${tipo}, dataAtualEn: ${this.dataAtualEn},
-    geoLocation: ${this.geoLocation}`);
+    const lancamento: Lancamento = new Lancamento(
+      this.dataAtualEn,
+      tipo,
+      this.geoLocation,
+      this.httUtil.obterIdUsuario()
+    );
+
+    this.lancamentoService.cadastrar(lancamento)
+    .subscribe(
+      data => {
+        const msg = 'Lançamento realizado com sucesso!';
+        this.matSnackBar.open(msg, 'Sucesso', { duration: 6000 });
+        this.router.navigate(['/funcionario/listagem']);
+      },
+      err => {
+        let msg = 'Tente novamente';
+        if (err.status === 400) {
+          msg = err.error.errors.join(' ');
+        }
+        this.matSnackBar.open(msg, 'Erro', { duration: 6000});
+      }
+    );
   }
 
   obterUrlMapa(): string {

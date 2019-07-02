@@ -21,6 +21,7 @@ import {
   LancamentoComponent,
   FuncionarioComponent
 } from './components';
+import { LancamentoService, HttpUtilService } from '../shared';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,10 @@ import {
     MatPaginatorModule,
     MatSortModule,
     MatCardModule
+  ],
+  providers: [
+    HttpUtilService,
+    LancamentoService
   ]
 })
 export class FuncionarioModule { }
