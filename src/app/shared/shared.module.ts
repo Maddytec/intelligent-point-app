@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import {IMaskModule} from 'angular-imask';
 import { TipoPipe } from './pipes';
 import { PtBrMatPaginatorIntl } from './pt-br-mat-paginator-intl';
+import { DataPipe } from './pipes/data.pipe';
 
 @NgModule({
   imports: [
@@ -11,10 +12,12 @@ import { PtBrMatPaginatorIntl } from './pt-br-mat-paginator-intl';
     IMaskModule
   ],
   declarations: [
-  TipoPipe],
+  TipoPipe,
+  DataPipe],
   exports: [
     IMaskModule,
-    TipoPipe
+    TipoPipe,
+    DataPipe
   ],
   providers: [
     PtBrMatPaginatorIntl
