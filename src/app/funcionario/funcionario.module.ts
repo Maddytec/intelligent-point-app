@@ -1,3 +1,4 @@
+import { PtBrMatPaginatorIntl } from './../shared/pt-br-mat-paginator-intl';
 import {
   MatInputModule,
   MatButtonModule,
@@ -8,7 +9,8 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatCardModule
+  MatCardModule,
+  MatPaginatorIntl
 } from '@angular/material';
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -47,7 +49,8 @@ import { LancamentoService, HttpUtilService } from '../shared';
   ],
   providers: [
     HttpUtilService,
-    LancamentoService
+    LancamentoService,
+    { provide: MatPaginatorIntl, useClass: PtBrMatPaginatorIntl }
   ]
 })
 export class FuncionarioModule { }

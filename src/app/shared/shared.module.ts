@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {IMaskModule} from 'angular-imask';
+import { PtBrMatPaginatorIntl } from './pt-br-mat-paginator-intl';
 
 @NgModule({
   imports: [
@@ -12,6 +13,9 @@ import {IMaskModule} from 'angular-imask';
   ],
   exports: [
     IMaskModule
+  ],
+  providers: [
+    PtBrMatPaginatorIntl
   ]
 })
 export class SharedModule { }
