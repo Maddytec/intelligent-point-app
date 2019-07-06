@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { PtBrMatPaginatorIntl } from './../shared/pt-br-mat-paginator-intl';
 import {
   MatInputModule,
@@ -45,7 +46,8 @@ import { LancamentoService, HttpUtilService } from '../shared';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatCardModule
+    MatCardModule,
+    SharedModule
   ],
   providers: [
     HttpUtilService,

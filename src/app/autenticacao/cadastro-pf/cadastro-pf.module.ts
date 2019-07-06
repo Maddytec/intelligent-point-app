@@ -1,5 +1,5 @@
+import { SharedModule } from './../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedModule } from './../../';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CadastrarPfComponent, CadastroPfComponent } from './components';
