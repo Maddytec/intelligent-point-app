@@ -9,9 +9,9 @@ import { Injectable } from '@angular/core';
 export class LancamentoService {
 
   private readonly PATH = 'lancamentos';
-  private readonly PATH_ULTIMO_LANC = '/funcionario/{funcionarioId}/ultimo';
-  private readonly PATH_LANCAMENTOS = '/funcionario/{funcionarioId}';
-  private readonly PATH_TODOS_LANC = '/funcionario/{funcionarioId}/todos';
+  private readonly PATH_ULTIMO_LANCAMENTO = '/funcionario/{funcionarioId}/ultimo';
+  private readonly PATH_LANCAMENTO = '/funcionario/{funcionarioId}';
+  private readonly PATH_TODOS_LANCAMENTO = '/funcionario/{funcionarioId}/todos';
 
 
   constructor(
@@ -21,7 +21,7 @@ export class LancamentoService {
   buscarUltimoTipoLancado(): Observable<any> {
     return this.http.get(
       environment.baseApiUrl + this.PATH +
-      this.PATH_ULTIMO_LANC.replace(
+      this.PATH_ULTIMO_LANCAMENTO.replace(
         '{funcionarioId}', this.httpUtil.obterIdUsuario()),
       this.httpUtil.headers()
     );
@@ -38,10 +38,22 @@ export class LancamentoService {
   listarTodosLancamentos(): Observable<any> {
     return this.http.get(
       environment.baseApiUrl + this.PATH +
-      this.PATH_TODOS_LANC.replace(
+      this.PATH_TODOS_LANCAMENTO.replace(
         '{funcionarioId}', this.httpUtil.obterIdUsuario()),
       this.httpUtil.headers()
     );
+  }
+
+  listarLancamentosPorFuncionario(
+    funcionarioId: string,
+    pagina: number,
+    ordem: string,
+    direcao: string): Observable<any> {
+    const url: string = environment.baseApiUrl + this.PATH + this.PATH_LANCAMENTO.replace('{funcionarioId}', funcionarioId);
+    const params: string = '?pag=' + pagina + '&ord=' + ordem + '&dir=' + direcao;
+
+    return this.http.get(url + params, this.httpUtil.headers());
+
   }
 }
 

@@ -20,6 +20,8 @@ import {
   FuncionarioRoutingModule
 } from './funcionario';
 
+import { AdminModule, AdminRoutingModule } from './admin';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -38,6 +40,8 @@ import {
     CadastroPfRoutingModule,
     FuncionarioModule,
     FuncionarioRoutingModule,
+    AdminModule,
+    AdminRoutingModule,
 
     AppRoutingModule
   ],
