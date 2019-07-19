@@ -1,9 +1,13 @@
+import { FuncionarioService } from './../../../shared/services/funcionario.service';
 import { FormBuilder } from '@angular/forms';
 import { HttpUtilService } from './../../../shared/services/http-util.service';
 import { LancamentoService } from './../../../shared/services/lancamento.service';
 import { MatTableDataSource, MatSnackBar, PageEvent, MatSort } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { Lancamento } from 'src/app/shared/models';
+
+const DATA = 'data';
+const TIPO = 'tipo';
 
 @Component({
   selector: 'app-listagem',
@@ -12,11 +16,9 @@ import { Lancamento } from 'src/app/shared/models';
 })
 export class ListagemComponent implements OnInit {
 
-  DATA = 'data';
-  TIPO = 'tipo';
 
   dataSource: MatTableDataSource<Lancamento>;
-  colunas: string[] = [this.DATA, this.TIPO, 'localizacao', 'acao'];
+  colunas: string[] = [DATA, TIPO, 'localizacao', 'acao'];
   funcionarioId: string;
   totalLancamentos: number;
 
@@ -28,7 +30,9 @@ export class ListagemComponent implements OnInit {
     private lancamentoService: LancamentoService,
     private httpUtilService: HttpUtilService,
     private matSnackBar: MatSnackBar,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private funcionarioService: FuncionarioService
+  ) { }
 
   ngOnInit() {
     this.pagina = 0;
@@ -37,7 +41,7 @@ export class ListagemComponent implements OnInit {
   }
 
   ordemPadrao() {
-    this.ordem = this.DATA;
+    this.ordem = DATA;
     this.direcao = 'DESC';
   }
 
@@ -47,8 +51,8 @@ export class ListagemComponent implements OnInit {
       this.funcionarioId, this.pagina, this.ordem, this.direcao)
       .subscribe(
         data => {
-          this.totalLancamentos = data[this.DATA].totalElements;
-          const lancamentos = data[this.DATA].content as Lancamento[];
+          this.totalLancamentos = data[DATA].totalElements;
+          const lancamentos = data[DATA].content as Lancamento[];
           this.dataSource = new MatTableDataSource<Lancamento>(lancamentos);
         },
         err => {

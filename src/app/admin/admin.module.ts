@@ -1,3 +1,4 @@
+import { FuncionarioService } from './../shared/services/funcionario.service';
 import { PtBrMatPaginatorIntl } from './../shared/pt-br-mat-paginator-intl';
 import { HttpUtilService } from './../shared/services/http-util.service';
 import { LancamentoService } from './../shared/services/lancamento.service';
@@ -66,6 +67,7 @@ import {
     LancamentoService,
     HttpUtilService,
     MatPaginatorIntl,
+    FuncionarioService,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: MatPaginatorIntl, useClass: PtBrMatPaginatorIntl }
   ]
