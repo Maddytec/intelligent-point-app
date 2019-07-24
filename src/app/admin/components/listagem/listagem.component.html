@@ -1,3 +1,17 @@
+<form [formGroup]="form" novalidate>
+  <mat-form-field>
+    <mat-select placeholder="Funcionários" 
+    formControlName="funcs"
+     [(value)]="funcionarioId"
+      (selectionChange)="exibirLancamentos()">
+      <mat-option *ngFor="let funcionario of funcionarios"
+       [value]="funcionario.id">
+        {{ funcionario.nome }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
 <a mat-button color="warn" routerLink="/admin/cadastro" *ngIf="funcionarioId">
   Adicionar lançamento
 </a>
@@ -44,8 +58,5 @@
   <mat-row *matRowDef="let row; columns: colunas;"></mat-row>
 </mat-table>
 
-<mat-paginator 
-[length]="totalLancamentos"
- [pageSize]="10" 
- (page)="paginar($event)">
+<mat-paginator [length]="totalLancamentos" [pageSize]="10" (page)="paginar($event)">
 </mat-paginator>

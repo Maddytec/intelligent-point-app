@@ -1,13 +1,15 @@
 import { FuncionarioService } from './../../../shared/services/funcionario.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpUtilService } from './../../../shared/services/http-util.service';
 import { LancamentoService } from './../../../shared/services/lancamento.service';
-import { MatTableDataSource, MatSnackBar, PageEvent, MatSort } from '@angular/material';
-import { Component, OnInit } from '@angular/core';
-import { Lancamento } from 'src/app/shared/models';
+import { MatTableDataSource, MatSnackBar, PageEvent, MatSort, MatSelect } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Lancamento, Funcionario } from 'src/app/shared/models';
 
 const DATA = 'data';
 const TIPO = 'tipo';
+const VALUE = 'value';
+const FUNCIONARIO_ID = 'funcionarioId';
 
 @Component({
   selector: 'app-listagem',
@@ -16,11 +18,15 @@ const TIPO = 'tipo';
 })
 export class ListagemComponent implements OnInit {
 
-
   dataSource: MatTableDataSource<Lancamento>;
   colunas: string[] = [DATA, TIPO, 'localizacao', 'acao'];
   funcionarioId: string;
   totalLancamentos: number;
+
+  funcionarios: Funcionario[];
+  @ViewChild(MatSelect)
+  matSelect: MatSelect;
+  form: FormGroup;
 
   private pagina: number;
   private ordem: string;
@@ -37,7 +43,14 @@ export class ListagemComponent implements OnInit {
   ngOnInit() {
     this.pagina = 0;
     this.ordemPadrao();
-    this.exibirLancamentos();
+    this.obterFuncionarios();
+    this.gerarForm();
+  }
+
+  gerarForm() {
+    this.form = this.formBuilder.group({
+      funcs: ['', []]
+    });
   }
 
   ordemPadrao() {
@@ -45,8 +58,41 @@ export class ListagemComponent implements OnInit {
     this.direcao = 'DESC';
   }
 
+  get funcId(): string {
+    return sessionStorage[FUNCIONARIO_ID] || false;
+  }
+
+  obterFuncionarios() {
+    this.funcionarioService.listaFuncionarioPorEmpresa()
+      .subscribe(
+        data => {
+          const usuarioId: string = this.httpUtilService.obterIdUsuario();
+          this.funcionarios = (data.data as Funcionario[])
+            .filter(func => func.id !== usuarioId);
+
+          if (this.funcId) {
+            this.form.get('funcs').setValue(parseInt(this.funcId, 10));
+            this.exibirLancamentos();
+          }
+        },
+        err => {
+          const msg = 'Erro obtendo funcionários.';
+          this.matSnackBar.open(msg, 'Erro', { duration: 6000 });
+        }
+      );
+  }
+
   exibirLancamentos() {
-    this.funcionarioId = '2';
+    if (this.matSelect.selected) {
+      this.funcionarioId = this.matSelect.selected[VALUE];
+    } else if (this.funcId) {
+      this.funcionarioId = this.funcId;
+    } else {
+      return;
+    }
+
+    sessionStorage[FUNCIONARIO_ID] = this.funcionarioId;
+
     this.lancamentoService.listarLancamentosPorFuncionario(
       this.funcionarioId, this.pagina, this.ordem, this.direcao)
       .subscribe(
