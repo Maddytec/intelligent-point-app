@@ -2,8 +2,8 @@ import { FuncionarioService } from './../../../shared/services/funcionario.servi
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpUtilService } from './../../../shared/services/http-util.service';
 import { LancamentoService } from './../../../shared/services/lancamento.service';
-import { MatTableDataSource, MatSnackBar, PageEvent, MatSort, MatSelect } from '@angular/material';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatSnackBar, PageEvent, MatSort, MatSelect, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Lancamento, Funcionario } from 'src/app/shared/models';
 
 const DATA = 'data';
@@ -37,8 +37,8 @@ export class ListagemComponent implements OnInit {
     private httpUtilService: HttpUtilService,
     private matSnackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private funcionarioService: FuncionarioService
-  ) { }
+    private funcionarioService: FuncionarioService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.pagina = 0;
@@ -108,10 +108,6 @@ export class ListagemComponent implements OnInit {
       );
   }
 
-  remover(lancamentoId: string) {
-    alert(lancamentoId);
-  }
-
   paginar(pageEvent: PageEvent) {
     this.pagina = pageEvent.pageIndex;
     this.exibirLancamentos();
@@ -127,4 +123,52 @@ export class ListagemComponent implements OnInit {
     this.exibirLancamentos();
   }
 
+  removerDialog(lancamentoId: string) {
+    const dialog = this.dialog.open(ConfirmarDialog, {});
+    dialog.afterClosed().subscribe(
+      remover => {
+        if (remover) {
+          this.remover(lancamentoId);
+        }
+      });
+  }
+
+  remover(lancamentoId: string) {
+    this.lancamentoService.remover(lancamentoId)
+      .subscribe(
+        data => {
+          const msg = 'Lançamento removido com sucesso!';
+          this.matSnackBar.open(msg, 'Sucesso', { duration: 6000 });
+          this.exibirLancamentos();
+        },
+        err => {
+          let msg = 'Tente novamente.';
+          if (err.status === 400) {
+            msg = err.error.errors.join(' ');
+          }
+          this.matSnackBar.open(msg, 'Erro', { duration: 6000 });
+        }
+      );
+  }
 }
+
+
+
+@Component({
+  selector: 'confirmar-dialog',
+  template: `
+    <h1 mat-dialog-title>Deseja realmente remover o lançamento?</h1>
+    <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="false" tabindex="-1">
+      Não
+      </button>
+      <button mat-button [mat-dialog-close]="true" tabindex="2">
+      Sim
+      </button>
+    </div>
+    `,
+})
+export class ConfirmarDialog {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+}
+

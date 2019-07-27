@@ -1,3 +1,4 @@
+import { ConfirmarDialog } from './components/listagem/listagem.component';
 import { FuncionarioService } from './../shared/services/funcionario.service';
 import { PtBrMatPaginatorIntl } from './../shared/pt-br-mat-paginator-intl';
 import { HttpUtilService } from './../shared/services/http-util.service';
@@ -39,7 +40,8 @@ import {
     ListagemComponent,
     CadastroComponent,
     AtualizacaoComponent,
-    AdminComponent
+    AdminComponent,
+    ConfirmarDialog
   ],
   imports: [
     CommonModule,
@@ -70,6 +72,7 @@ import {
     FuncionarioService,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: MatPaginatorIntl, useClass: PtBrMatPaginatorIntl }
-  ]
+  ],
+  entryComponents: [ ConfirmarDialog ]
 })
 export class AdminModule { }

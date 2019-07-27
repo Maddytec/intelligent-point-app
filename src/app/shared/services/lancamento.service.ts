@@ -53,7 +53,14 @@ export class LancamentoService {
     const params: string = '?pag=' + pagina + '&ord=' + ordem + '&dir=' + direcao;
 
     return this.http.get(url + params, this.httpUtil.headers());
-
   }
+
+  remover(lancamentoId: string): Observable<any> {
+    return this.http.delete(
+      environment.baseApiUrl + this.PATH + '/' + lancamentoId,
+      this.httpUtil.headers()
+    );
+  }
+
 }
 
