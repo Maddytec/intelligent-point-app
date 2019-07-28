@@ -32,7 +32,8 @@ import {
   MatSortModule,
   MatPaginatorModule,
   MatPaginatorIntl,
-  MAT_DATE_LOCALE
+  MAT_DATE_LOCALE,
+  MatOptionModule
 } from '@angular/material';
 
 @NgModule({
