@@ -2,7 +2,7 @@ import { Lancamento } from './../models/lancamento.model';
 import { environment } from './../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { HttpUtilService } from './http-util.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -62,5 +62,18 @@ export class LancamentoService {
     );
   }
 
-}
+  buscarPorId(lancamentoId: string): Observable<any> {
+    return this.http.get(
+      environment.baseApiUrl + this.PATH + '/' + lancamentoId, this.httpUtil.headers()
+    );
+  }
 
+  atualizar(lancamento: Lancamento): Observable<any> {
+    return this.http.put(
+      environment.baseApiUrl + this.PATH + '/' + lancamento.id,
+      lancamento,
+      this.httpUtil.headers()
+    );
+  }
+
+}

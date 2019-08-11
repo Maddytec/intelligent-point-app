@@ -152,8 +152,6 @@ export class ListagemComponent implements OnInit {
   }
 }
 
-
-
 @Component({
   selector: 'confirmar-dialog',
   template: `

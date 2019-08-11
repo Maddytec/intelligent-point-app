@@ -4,6 +4,6 @@ export class Lancamento {
         public tipo: string,
         public localizacao: string,
         public funcionarioId: string,
-        public id?: string
+        public id?: number
     ) { }
 }
