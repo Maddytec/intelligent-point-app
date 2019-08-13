@@ -1,3 +1,4 @@
+import { AdminGuard } from './services/admin-guard.service';
 import { ConfirmarDialog } from './components/listagem/listagem.component';
 import { FuncionarioService } from './../shared/services/funcionario.service';
 import { PtBrMatPaginatorIntl } from './../shared/pt-br-mat-paginator-intl';
@@ -72,7 +73,8 @@ import {
     MatPaginatorIntl,
     FuncionarioService,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
-    { provide: MatPaginatorIntl, useClass: PtBrMatPaginatorIntl }
+    { provide: MatPaginatorIntl, useClass: PtBrMatPaginatorIntl },
+    AdminGuard
   ],
   entryComponents: [ ConfirmarDialog ]
 })

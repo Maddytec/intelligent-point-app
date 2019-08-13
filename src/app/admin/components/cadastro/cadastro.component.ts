@@ -20,6 +20,7 @@ export class CadastroComponent implements OnInit {
   horas: string[];
   minutos: string[];
   tipos: string[];
+  tipo: Tipo;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -41,4 +41,11 @@ export class HttpUtilService {
     }
     return JSON.parse(atob(localStorage[TOKEN].split('.')[1]));
   }
+
+  obterPerfil(): string {
+    if (!localStorage[TOKEN]) { return ''; }
+
+    const dadosUsuario = this.obterDadosUsuario();
+    return dadosUsuario ? dadosUsuario.role : '';
+  }
 }

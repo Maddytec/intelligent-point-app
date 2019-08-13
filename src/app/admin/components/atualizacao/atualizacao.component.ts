@@ -24,6 +24,7 @@ export class AtualizacaoComponent implements OnInit {
   horas: string[];
   minutos: string[];
   tipos: string[];
+  tipo: Tipo;
 
   lancamentoId: string;
   localizacao: string;
